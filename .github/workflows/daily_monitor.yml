@@ -1,0 +1,57 @@
+name: Daily Monitor
+
+on:
+  schedule:
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    env:
+      APP_ENV: production
+      USE_MOCK_DATA: "false"
+      INSFORGE_DATABASE_URL: ${{ secrets.INSFORGE_DATABASE_URL }}
+      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+      LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+      LLM_MODEL: ${{ secrets.LLM_MODEL }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate production environment
+        run: |
+          missing=()
+          for name in INSFORGE_DATABASE_URL X_BEARER_TOKEN LLM_API_KEY LLM_BASE_URL LLM_MODEL; do
+            if [ -z "${!name}" ]; then
+              missing+=("$name")
+            fi
+          done
+
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error::Missing required GitHub Secrets for production daily monitor: ${missing[*]}"
+            echo "Configure these repository secrets before running this workflow."
+            exit 1
+          fi
+
+      - name: Run daily monitor
+        run: python -m app.main --prod --export
+
+      - name: Upload daily outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: atlas-daily-lead-agent-outputs
+          path: |
+            outputs/*.csv
+            outputs/daily_report.md
+          if-no-files-found: error

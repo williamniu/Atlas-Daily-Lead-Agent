@@ -1,0 +1,16 @@
+include:
+  - "AI-native creator platforms"
+  - "creator platforms with many users"
+  - "digital marketing firms"
+  - "iPhone AI media apps"
+  - "mobile AI media app teams"
+  - "AI video generator apps"
+  - "short-form video producers"
+  - "short-form movie producers"
+
+exclude:
+  - "enterprise"
+  - "large enterprise"
+  - "Fortune 500"
+  - "procurement-led sales"
+
