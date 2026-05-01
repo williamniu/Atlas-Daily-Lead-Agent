@@ -2,8 +2,10 @@
 
 import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from typing import Dict, Iterable, List, Optional
 
+from dateutil import parser as date_parser
 import requests
 
 from app.agents.query_planner import QuerySpec, build_x_query
@@ -12,7 +14,7 @@ from app.schemas import RawPost
 
 
 ADVANCED_SEARCH_PATH = "/twitter/tweet/advanced_search"
-DEFAULT_MAX_RESULTS = 20
+DEFAULT_MAX_RESULTS = 50
 MAX_BACKOFF_SECONDS = 120
 
 
@@ -121,7 +123,7 @@ def _normalize_payload(payload: Dict, query_spec: QuerySpec, max_results: int) -
                 reply_count=tweet.get("replyCount") or 0,
                 repost_count=tweet.get("retweetCount") or 0,
                 quote_count=tweet.get("quoteCount") or 0,
-                created_at=tweet.get("createdAt"),
+                created_at=_parse_twitter_datetime(tweet.get("createdAt")),
                 matched_query=query_spec.query,
                 raw_json={
                     "tweet": tweet,
@@ -153,3 +155,12 @@ def _parse_retry_after(value: Optional[str]) -> int:
         return max(0, int(value))
     except ValueError:
         return 0
+
+
+def _parse_twitter_datetime(value: Optional[str]) -> Optional[datetime]:
+    if not value:
+        return None
+    parsed = date_parser.parse(value)
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed

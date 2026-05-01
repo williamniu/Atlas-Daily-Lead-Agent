@@ -73,14 +73,14 @@ def _score_scale_potential(raw_post: RawPost, classified_post: ClassifiedPost, r
         score = 30
         reason_codes.append("CREATOR_PLATFORM_SCALE")
     elif classified_post.scale_signals or raw_post.followers_count >= 50000:
-        score = 24
+        score = 25
         reason_codes.append("VIDEO_GEN_SCALE")
     elif raw_post.followers_count >= 10000:
-        score = 16
+        score = 20
     elif classified_post.is_kol_distribution:
-        score = 12
+        score = 15
     else:
-        score = 8
+        score = 10
     return score
 
 
@@ -135,7 +135,7 @@ def _score_buying_intent(classified_post: ClassifiedPost, reason_codes: List[str
         reason_codes.append("PRODUCTION_WORKLOAD")
         return 15
     if classified_post.intent_type == "technical pain":
-        return 9
+        return 10
     return 2
 
 

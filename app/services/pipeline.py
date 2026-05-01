@@ -109,7 +109,7 @@ def run_pipeline(
 
 def _collect_live_posts(query_specs: List[QuerySpec], limit: Optional[int]) -> Tuple[List[RawPost], str]:
     provider = settings.live_data_provider.lower().strip()
-    max_results = limit or 20
+    max_results = limit or 50
 
     if provider in {"auto", "twitterapi_io"} and settings.has_twitterapi_io:
         return (
