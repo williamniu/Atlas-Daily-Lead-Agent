@@ -12,7 +12,9 @@ jobs:
       APP_ENV: production
       USE_MOCK_DATA: "false"
       INSFORGE_DATABASE_URL: ${{ secrets.INSFORGE_DATABASE_URL }}
-      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+      LIVE_DATA_PROVIDER: twitterapi_io
+      TWITTERAPI_IO_API_KEY: ${{ secrets.TWITTERAPI_IO_API_KEY }}
+      TWITTERAPI_IO_BASE_URL: ${{ secrets.TWITTERAPI_IO_BASE_URL || 'https://api.twitterapi.io' }}
       LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
       LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
       LLM_MODEL: ${{ secrets.LLM_MODEL }}
@@ -32,7 +34,7 @@ jobs:
       - name: Validate production environment
         run: |
           missing=()
-          for name in INSFORGE_DATABASE_URL X_BEARER_TOKEN LLM_API_KEY LLM_BASE_URL LLM_MODEL; do
+          for name in INSFORGE_DATABASE_URL TWITTERAPI_IO_API_KEY; do
             if [ -z "${!name}" ]; then
               missing+=("$name")
             fi

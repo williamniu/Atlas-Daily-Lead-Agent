@@ -13,7 +13,10 @@ from app.agents.lead_scorer import score_lead
 from app.agents.query_planner import QuerySpec, load_query_specs
 from app.agents.segment_classifier import classify_post
 from app.collectors.mock_loader import load_mock_posts
-from app.collectors.x_api import MissingXBearerTokenError, collect_recent_posts
+from app.collectors.twitterapi_io import (
+    MissingTwitterApiIoKeyError,
+    collect_recent_posts as collect_twitterapi_io_posts,
+)
 from app.config import settings
 from app.db.database import get_session, init_db
 from app.db.models import ClassifiedPostRecord, LeadRecord, RawPostRecord, Run
@@ -55,9 +58,9 @@ def run_pipeline(
         notes.append("Loaded mock posts.")
     else:
         try:
-            raw_posts = collect_recent_posts(query_specs=query_specs, max_results=limit or 10)
-            notes.append("Loaded posts from X API.")
-        except MissingXBearerTokenError as exc:
+            raw_posts, provider_note = _collect_live_posts(query_specs, limit=limit)
+            notes.append(provider_note)
+        except MissingTwitterApiIoKeyError as exc:
             raw_posts = load_mock_posts()
             used_mock_data = True
             notes.append(str(exc))
@@ -102,6 +105,21 @@ def run_pipeline(
         export_outputs(result)
 
     return result
+
+
+def _collect_live_posts(query_specs: List[QuerySpec], limit: Optional[int]) -> Tuple[List[RawPost], str]:
+    provider = settings.live_data_provider.lower().strip()
+    max_results = limit or 20
+
+    if provider in {"auto", "twitterapi_io"} and settings.has_twitterapi_io:
+        return (
+            collect_twitterapi_io_posts(query_specs=query_specs, max_results=max_results),
+            "Loaded posts from TwitterAPI.io.",
+        )
+
+    raise MissingTwitterApiIoKeyError(
+        "TWITTERAPI_IO_API_KEY is required for live collection with the TwitterAPI.io provider adapter."
+    )
 
 
 def export_outputs(result: PipelineResult, output_dir: Path = OUTPUT_DIR) -> None:

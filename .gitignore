@@ -5,6 +5,7 @@
 .agents
 .augment
 .claude
+.env
 .cline
 .github/copilot*
 .kilocode

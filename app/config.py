@@ -27,8 +27,15 @@ class Settings(BaseSettings):
     )
     database_url: Optional[str] = Field(default=None, validation_alias="DATABASE_URL")
 
-    x_bearer_token: Optional[str] = Field(default=None, validation_alias="X_BEARER_TOKEN")
-
+    live_data_provider: str = Field(default="auto", validation_alias="LIVE_DATA_PROVIDER")
+    twitterapi_io_api_key: Optional[str] = Field(
+        default=None,
+        validation_alias="TWITTERAPI_IO_API_KEY",
+    )
+    twitterapi_io_base_url: str = Field(
+        default="https://api.twitterapi.io",
+        validation_alias="TWITTERAPI_IO_BASE_URL",
+    )
     llm_api_key: Optional[str] = Field(default=None, validation_alias="LLM_API_KEY")
     llm_base_url: str = Field(
         default="https://api.openai.com/v1",
@@ -51,9 +58,9 @@ class Settings(BaseSettings):
         return "sqlite:///./local_dev.db"
 
     @property
-    def has_x_api(self) -> bool:
-        """Return whether X API credentials are configured."""
-        return bool(self.x_bearer_token)
+    def has_twitterapi_io(self) -> bool:
+        """Return whether TwitterAPI.io credentials are configured."""
+        return bool(self.twitterapi_io_api_key)
 
     @property
     def has_llm(self) -> bool:
