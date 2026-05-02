@@ -36,34 +36,35 @@ Atlas Cloud is positioned around:
 
 ```mermaid
 flowchart TD
-  subgraph DATA[Data Sources]
-    TWEET[TwitterAPI.io]
-    MOCK[Mock JSONL]
+  subgraph DATA["Data Sources"]
+    TWEET["TwitterAPI.io"]
+    MOCK["Mock JSONL"]
   end
 
-  subgraph PIPE[Agent Pipeline]
-    QP[Query Planner]
-    COL[TwitterAPI.io Adapter]
-    NORM[Normalization & Deduplication]
-    SEG[Segment Classifier]
-    PAIN[Pain / Intent Classifier]
-    COMP[Competitor Detector]
-    SCORE[Lead Scorer]
-    OUT[Outreach Angle Generator]
+  subgraph PIPE["Agent Pipeline"]
+    QP["Query Planner"]
+    COL["TwitterAPI.io Adapter"]
+    NORM["Normalization & Deduplication"]
+    SEG["Segment Classifier"]
+    PAIN["Pain / Intent Classifier"]
+    COMP["Competitor Detector"]
+    SCORE["Lead Scorer"]
+    OUT["Outreach Angle Generator"]
   end
 
-  subgraph STORE[Storage]
-    DB[InsForge Postgres]
+  subgraph STORE["Storage"]
+    DB["InsForge Postgres"]
   end
 
-  subgraph DASH[Dashboard]
-    UI[Streamlit (Render)]
+  subgraph DASH["Dashboard"]
+    UI["Streamlit on Render"]
   end
 
-  subgraph AUTO[Automation]
-    CI[GitHub Actions]
+  subgraph AUTO["Automation"]
+    CI["GitHub Actions"]
   end
 
+  QP --> COL
   TWEET --> COL
   MOCK --> COL
   COL --> NORM
