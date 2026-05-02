@@ -5,11 +5,11 @@ Atlas Daily Lead Intelligence Dashboard is a daily GTM intelligence system for A
 ## Product Summary
 <img width="1024" height="1536" alt="Image" src="https://github.com/user-attachments/assets/655a7c22-95c3-4bce-a9ee-c914086be282" />
 
-## Atlas Cloud First-Wave ICP
+## Atlas Cloud ICP
 
 Atlas Cloud's first-wave GTM motion focuses on fast-moving AI media customers that can adopt infrastructure quickly:
 
-1. Higgsfield-like AI-native creator platforms
+1. Higgsfield-like AI-native creator platforms(First wave)
 2. Platforms with many creators
 3. Digital marketing firms
 4. iPhone/mobile AI media app teams
