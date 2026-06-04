@@ -3,7 +3,7 @@
 Atlas Daily Lead Intelligence Dashboard is a daily GTM intelligence system for Atlas Cloud. It finds high-scale AI media customers from public Twitter/X posts, classifies noisy social signals, scores lead quality, explains why each lead matters, and presents the result in an executive-friendly Streamlit dashboard backed by InsForge Postgres.
 
 ## Demo Video
-https://youtu.be/3oHxkRsQ7LQ
+[https://youtu.be/3oHxkRsQ7LQ](https://youtu.be/3oHxkRsQ7LQ)
 ## Product Summary
 <img width="1024" height="1536" alt="Image" src="https://github.com/user-attachments/assets/ff13c772-3ebe-4457-96aa-920ca9699260" />
 
